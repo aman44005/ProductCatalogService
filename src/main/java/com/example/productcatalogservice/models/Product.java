@@ -11,5 +11,7 @@ public class Product extends BaseModel {
     private String description;
     private String imageUrl;
     private String specification;
+    private Double commission;
+    private Boolean isPrimeSaleSpecific;
 
 }
