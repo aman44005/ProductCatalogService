@@ -10,29 +10,22 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
+@RequestMapping("/products")
 public class ProductController {
 
     @Autowired
     private IProductService productService;
 
-    @GetMapping("/products")
-    public List<Product> getProducts() {
-//        List<Product> products = new ArrayList<>();
-//        Product product = new Product();
-//        product.setId(1L);
-//        product.setName("Test_Product");
-//        products.add(product);
-//        return products;
-        return null;
-    }
-
-    @GetMapping("/products/{id}")
+    @GetMapping("{id}")
     public ResponseEntity<ProductDto> getProduct(@PathVariable("id") Long product_id) {
        Product product = productService.getProductDetailsById(product_id);
 
@@ -42,6 +35,19 @@ public class ProductController {
 
         ProductDto productDto = from(product);
         return new ResponseEntity<>(productDto, HttpStatus.OK);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<ProductDto>> getAllProducts(){
+        List<Product> allProducts = productService.getAllProducts();
+
+        if(allProducts == null)return null;
+
+        List<ProductDto> productDtos = allProducts.stream()
+                .map(x -> from(x))
+                .collect(Collectors.toList());
+
+        return new ResponseEntity<>(productDtos, HttpStatus.OK);
     }
 
     private ProductDto from(Product product) {
