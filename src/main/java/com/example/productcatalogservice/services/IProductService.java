@@ -8,4 +8,5 @@ import java.util.List;
 public interface IProductService {
     Product getProductDetailsById(Long id);
     List<Product> getAllProducts();
+    Product replaceProduct(Long id, Product inputProduct);
 }
